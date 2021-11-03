@@ -7,4 +7,4 @@ dépendances :
  - pykeepass (installer avec pip)
  - notify-send
 
-Écrivez le chemin vers la base de données dans la variable path.
+Executez le script config.sh (./config.sh) afin d'éditer le chemin vers votre base de données.

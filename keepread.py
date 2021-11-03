@@ -2,12 +2,9 @@
 from pykeepass import PyKeePass as pkp
 import sys
 import getpass
-import os
 import subprocess
 
-user = os.environ["USER"]
-
-path="/home/"+user+"/media/keepass/keepass3.kdbx"
+path=""
 
 print(path)
 

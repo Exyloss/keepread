@@ -2,7 +2,6 @@
 from pykeepass import PyKeePass as pkp
 import sys
 import subprocess
-import os
 
 def copy(text):
     text = str(text)
@@ -37,9 +36,7 @@ def show_entries(temp):
     name = dmenu_show(["dmenu", "-l", "10", "-p", "identifiants"], temp)
     return name
 
-user = os.environ['USER']
-
-path="/home/"+user+"/media/keepass/keepass3.kdbx"
+path=""
 
 print(path)
 
