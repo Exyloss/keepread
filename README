@@ -6,4 +6,4 @@ dépendances :
  - xclip
  - pykeepass (installer avec pip)
 
-Écrivez le chemin vers la base de données dans un fichier path.txt socké au même endroit que keepread ou éditez la variable path.
+Écrivez le chemin vers la base de données dans la variable path.

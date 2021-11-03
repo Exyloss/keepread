@@ -1,8 +1,14 @@
 #!/usr/bin/env python3
 from pykeepass import PyKeePass as pkp
 import sys
-import xclip as pc
 import subprocess
+import os
+
+def copy(text):
+    text = str(text)
+    p = subprocess.Popen(['xclip', '-selection', "clip"],
+                         stdin=subprocess.PIPE, close_fds=True)
+    p.communicate(input=text.encode('utf-8'))
 
 def dmenu_show(args,items):
     try:
@@ -32,11 +38,9 @@ def show_entries(temp):
     name = dmenu_show(["dmenu", "-l", "10", "-p", "identifiants"], temp)
     return name
 
-f = open("path.txt","r")
-lines = f.readlines()
+user = os.environ['USER']
 
-for line in lines:
-    path=line.replace("\n","")
+path="/home/"+user+"/media/keepass/keepass3.kdbx"
 
 print(path)
 
@@ -66,5 +70,5 @@ while True:
     if r == "retour":
         name = show_entries(temp)
     else:
-        pc.copy(r.split(" ")[-1])
+        copy(r.split(" ")[-1])
         quit()

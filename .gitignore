@@ -6,9 +6,6 @@ __pycache__/
 # C extensions
 *.so
 
-# Chemin de la base de donnnées
-path.txt
-
 # Distribution / packaging
 .Python
 build/

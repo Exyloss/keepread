@@ -1,14 +1,13 @@
 #!/usr/bin/env python3
 from pykeepass import PyKeePass as pkp
 import sys
-import xclip as pc
 import getpass
+import os
+import subprocess
 
-f = open("path.txt","r")
-lines = f.readlines()
+user = os.environ["USER"]
 
-for line in lines:
-    path=line.replace("\n","")
+path="/home/"+user+"/media/keepass/keepass3.kdbx"
 
 print(path)
 
@@ -22,6 +21,12 @@ try:
 except:
     print("Mot de passe erroné.")
     quit()
+
+def copy(text):
+    text = str(text)
+    p = subprocess.Popen(['xclip', '-selection', "clip"],
+                         stdin=subprocess.PIPE, close_fds=True)
+    p.communicate(input=text.encode('utf-8'))
 
 def new_entry(arg):
     entry = kp.find_entries(title=arg, first=True)
@@ -56,9 +61,9 @@ while True:
     if r == "q":
         break
     elif r == "m":
-        pc.copy(entry.password)
+        copy(entry.password)
     elif r == "n":
-        pc.copy(entry.username)
+        copy(entry.username)
     elif r == "r":
         r = input("Nom de l'id. : ")
         entry = new_entry(r)
