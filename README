@@ -5,5 +5,6 @@ dépendances :
  - dmenu (avec le patch password)
  - xclip
  - pykeepass (installer avec pip)
+ - notify-send
 
 Écrivez le chemin vers la base de données dans la variable path.

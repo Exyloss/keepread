@@ -75,4 +75,5 @@ while True:
         name = show_entries(temp)
     else:
         copy(r.split(" ")[-1])
+        proc = subprocess.Popen(["notify-send", r+" copié."])
         quit()
