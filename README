@@ -3,5 +3,7 @@ KeepRead
 dépendances : 
  - python
  - dmenu (avec le patch password)
+ - pyperclip (installer avec pip)
+ - pykeepass (installer avec pip)
 
 Le programme dmenu2.py doit être placé dans le même dossier que keepread-dmenu.py.
