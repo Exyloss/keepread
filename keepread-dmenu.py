@@ -1,12 +1,21 @@
 #!/usr/bin/env python3
 from pykeepass import PyKeePass as pkp
 import sys
-import pyperclip as pc
+import xclip as pc
 import dmenu2 as d
+
+
+f = open("path.txt","r")
+lines = f.readlines()
+
+for line in lines:
+    path=line.replace("\n","")
+
+print(path)
 
 try:
     r=d.show(["dmenu", "-p", "mot de passe", "-P"],"")
-    kp = pkp("/home/antonin/media/keepass/keepass3.kdbx", password=r)
+    kp = pkp(path, password=r)
 except:
     print("Mot de passe erroné.")
     quit()

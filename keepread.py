@@ -1,8 +1,16 @@
 #!/usr/bin/env python3
 from pykeepass import PyKeePass as pkp
 import sys
-import pyperclip as pc
+import xclip as pc
 import getpass
+
+f = open("path.txt","r")
+lines = f.readlines()
+
+for line in lines:
+    path=line.replace("\n","")
+
+print(path)
 
 if len(sys.argv) == 1:
     print("Vous devez renseigner le nom de l'identifiant dont vous souhaitez obtenir les informations.\nPour obtenir la liste des identifiants, faire keepread.py -l")
@@ -10,7 +18,7 @@ if len(sys.argv) == 1:
 
 try:
     r=getpass.getpass("mot de passe : ")
-    kp = pkp("/home/antonin/media/keepass/keepass3.kdbx", password=r)
+    kp = pkp(path, password=r)
 except:
     print("Mot de passe erroné.")
     quit()
