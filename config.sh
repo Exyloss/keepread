@@ -6,3 +6,4 @@ rep=$(echo "$rep" | sed "s|~|/home/$USER|")
 #printf "%s" "$rep"
 sed -i "s|path=\"\"|path=\"$rep\"|" keepread.py
 sed -i "s|path=\"\"|path=\"$rep\"|" keepread-dmenu.py
+cp keepread.py keepread-dmenu.py ~/.local/bin/
