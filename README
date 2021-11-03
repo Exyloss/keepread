@@ -6,5 +6,4 @@ dépendances :
  - xclip
  - pykeepass (installer avec pip)
 
-Le programme dmenu2.py doit être placé dans le même dossier que keepread-dmenu.py.
 Écrivez le chemin vers la base de données dans un fichier path.txt socké au même endroit que keepread ou éditez la variable path.
