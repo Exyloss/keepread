@@ -6,8 +6,7 @@ import os
 
 def copy(text):
     text = str(text)
-    p = subprocess.Popen(['xclip', '-selection', "clip"],
-                         stdin=subprocess.PIPE, close_fds=True)
+    p = subprocess.Popen(['xclip', '-selection', "clip"], stdin=subprocess.PIPE, close_fds=True)
     p.communicate(input=text.encode('utf-8'))
 
 def dmenu_show(args,items):
@@ -32,7 +31,7 @@ def dmenu_show(args,items):
     stderr = proc.stderr.read()
     
     if stderr == '':
-        return None
+        quit()
 
 def show_entries(temp):
     name = dmenu_show(["dmenu", "-l", "10", "-p", "identifiants"], temp)
@@ -65,9 +64,14 @@ while True:
     if entry == None:
         print("Identifiant invalide.")
         quit()
-    entry_values = ["retour", "Mot de passe : "+entry.password, "Identifiant : "+entry.username]
+    entry_values = ["Mot de passe : "+entry.password, "Identifiant : "+entry.username, "supprimer", "retour"]
     r = dmenu_show(["dmenu", "-l", "10", "-p", name], entry_values)
     if r == "retour":
+        name = show_entries(temp)
+    elif r == "supprimer":
+        r = dmenu_show(["dmenu", "-l", "10", "-p", name], ["oui", "non"])
+        if r == "oui":
+            kp.delete_entry(entry)
         name = show_entries(temp)
     else:
         copy(r.split(" ")[-1])
