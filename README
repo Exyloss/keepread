@@ -1,0 +1,7 @@
+KeepRead
+
+dépendances : 
+ - python
+ - dmenu (avec le patch password)
+
+Le programme dmenu2.py doit être placé dans le même dossier que keepread-dmenu.py.
