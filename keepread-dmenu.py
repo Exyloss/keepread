@@ -2,8 +2,35 @@
 from pykeepass import PyKeePass as pkp
 import sys
 import xclip as pc
-import dmenu2 as d
+import subprocess
 
+def dmenu_show(args,items):
+    try:
+        proc = subprocess.Popen(
+            args,
+            universal_newlines=True,
+            stdin=subprocess.PIPE,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE)
+    except OSError as err:
+        print("erreur lors du lancement de dmenu")
+    
+    with proc.stdin:
+        for item in items:
+            proc.stdin.write(item)
+            proc.stdin.write('\n')
+    
+    if proc.wait() == 0:
+        return proc.stdout.read().rstrip('\n')
+    
+    stderr = proc.stderr.read()
+    
+    if stderr == '':
+        return None
+
+def show_entries(temp):
+    name = dmenu_show(["dmenu", "-l", "10", "-p", "identifiants"], temp)
+    return name
 
 f = open("path.txt","r")
 lines = f.readlines()
@@ -14,15 +41,11 @@ for line in lines:
 print(path)
 
 try:
-    r=d.show(["dmenu", "-p", "mot de passe", "-P"],"")
+    r=dmenu_show(["dmenu", "-p", "mot de passe", "-P"],"")
     kp = pkp(path, password=r)
 except:
     print("Mot de passe erroné.")
     quit()
-
-def show_entries(temp):
-    name = d.show(["dmenu", "-l", "10", "-p", "identifiants"], temp)
-    return name
 
 e = kp.find_entries(title=".*", regex=True)
 temp = []
@@ -39,7 +62,7 @@ while True:
         print("Identifiant invalide.")
         quit()
     entry_values = ["retour", "Mot de passe : "+entry.password, "Identifiant : "+entry.username]
-    r = d.show(["dmenu", "-l", "10", "-p", name], entry_values)
+    r = dmenu_show(["dmenu", "-l", "10", "-p", name], entry_values)
     if r == "retour":
         name = show_entries(temp)
     else:
