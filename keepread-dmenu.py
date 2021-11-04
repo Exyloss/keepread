@@ -1,7 +1,14 @@
 #!/usr/bin/env python3
 from pykeepass import PyKeePass as pkp
-import sys
 import subprocess
+
+path=""
+print("Chemin vers la base de données : "+path)
+
+if path == "":
+    print("Veuillez editer la variable path avec le chemin vers votre base de données dans le fichier keepread.py.")
+    quit()
+
 
 def copy(text):
     text = str(text)
@@ -18,17 +25,17 @@ def dmenu_show(args,items):
             stderr=subprocess.PIPE)
     except OSError as err:
         print("erreur lors du lancement de dmenu")
-    
+
     with proc.stdin:
         for item in items:
             proc.stdin.write(item)
             proc.stdin.write('\n')
-    
+
     if proc.wait() == 0:
         return proc.stdout.read().rstrip('\n')
-    
+
     stderr = proc.stderr.read()
-    
+
     if stderr == '':
         quit()
 
@@ -36,9 +43,7 @@ def show_entries(temp):
     name = dmenu_show(["dmenu", "-l", "10", "-p", "identifiants"], temp)
     return name
 
-path=""
 
-print(path)
 
 try:
     r=dmenu_show(["dmenu", "-p", "mot de passe", "-P"],"")
@@ -66,7 +71,7 @@ while True:
     if r == "retour":
         name = show_entries(temp)
     elif r == "supprimer":
-        r = dmenu_show(["dmenu", "-l", "10", "-p", name], ["oui", "non"])
+        r = dmenu_show(["dmenu", "-l", "10", "-p", "Êtes-vous sûr de vouloir supprimer "+name+" ?"], ["oui", "non"])
         if r == "oui":
             kp.delete_entry(entry)
         name = show_entries(temp)

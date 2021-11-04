@@ -5,8 +5,11 @@ import getpass
 import subprocess
 
 path=""
-
 print(path)
+
+if path == "":
+    print("Veuillez editer la variable path avec le chemin vers votre base de données dans le fichier keepread.py.")
+    quit()
 
 if len(sys.argv) == 1:
     print("Vous devez renseigner le nom de l'identifiant dont vous souhaitez obtenir les informations.\nPour obtenir la liste des identifiants, faire keepread.py -l")
