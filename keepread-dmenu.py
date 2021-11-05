@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 from pykeepass import PyKeePass as pkp
 import subprocess
+import os
 
 #Variable à éditer
-path=""
+path="/home/antonin/media/keepass/keepass3.kdbx"
 print("Chemin vers la base de données : "+path)
 
 if path == "":
@@ -45,13 +46,14 @@ def show_entries(temp):
     return name
 
 
-
-try:
+while True:
     r=dmenu_show(["dmenu", "-p", "mot de passe", "-P"],"")
-    kp = pkp(path, password=r)
-except:
-    print("Mot de passe erroné.")
-    quit()
+    try:
+        kp = pkp(path, password=r)
+        break
+    except:
+        os.system('notify-send "Mot de passe erroné."')
+        continue
 
 e = kp.find_entries(title=".*", regex=True)
 temp = []
