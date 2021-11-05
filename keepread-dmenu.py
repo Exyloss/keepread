@@ -2,20 +2,18 @@
 from pykeepass import PyKeePass as pkp
 import subprocess
 import os
+from pynput.keyboard import Controller, Key
 
 #Variable à éditer
-path=""
+path="/home/antonin/media/keepass/keepass3.kdbx"
 print("Chemin vers la base de données : "+path)
+
+keyboard = Controller()
+
 
 if path == "":
     print("Veuillez editer la variable path avec le chemin vers votre base de données dans le fichier keepread.py.")
     quit()
-
-
-def copy(text):
-    text = str(text)
-    p = subprocess.Popen(['xclip', '-selection', "clip"], stdin=subprocess.PIPE, close_fds=True)
-    p.communicate(input=text.encode('utf-8'))
 
 def dmenu_show(args,items):
     try:
@@ -79,6 +77,6 @@ while True:
             kp.delete_entry(entry)
         name = show_entries(temp)
     else:
-        copy(r.split(" ")[-1])
-        proc = subprocess.Popen(["notify-send", r+" copié."])
-        quit()
+        proc = subprocess.Popen(["notify-send", r+" rentré"])
+        for i in r.split(" ")[-1]:
+            keyboard.press(i)
