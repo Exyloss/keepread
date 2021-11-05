@@ -4,7 +4,7 @@ import subprocess
 import os
 
 #Variable à éditer
-path="/home/antonin/media/keepass/keepass3.kdbx"
+path=""
 print("Chemin vers la base de données : "+path)
 
 if path == "":
