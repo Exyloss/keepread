@@ -16,12 +16,14 @@ if len(sys.argv) == 1:
     print("Vous devez renseigner le nom de l'identifiant dont vous souhaitez obtenir les informations.\nPour obtenir la liste des identifiants, faire keepread.py -l")
     quit()
 
-try:
+while True:
     r=getpass.getpass("mot de passe : ")
-    kp = pkp(path, password=r)
-except:
-    print("Mot de passe erroné.")
-    quit()
+    try:
+        kp = pkp(path, password=r)
+        break
+    except:
+        print("Mot de passe erroné.")
+        continue
 
 def copy(text):
     text = str(text)
@@ -37,7 +39,7 @@ def new_entry(arg):
     return entry
 
 if sys.argv[1] == "-l":
-   e = kp.find_entries(title=".*", regex=True)
+    e = kp.find_entries(title=".*", regex=True)
     temp = ""
     for i in e:
         field = str(i).replace("/", " ").strip().split()

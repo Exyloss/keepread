@@ -1,5 +1,5 @@
 # KeepRead
-Dépendances :
+## Dépendances
  - python
  - python-pip
  - dmenu (avec le patch "password")
