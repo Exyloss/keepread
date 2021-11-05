@@ -3,10 +3,9 @@ from pykeepass import PyKeePass as pkp
 import sys
 import getpass
 import subprocess
-import os
 
 #Variable à éditer
-path="/home/antonin/keepass3.kdbx"
+path=""
 print(path)
 
 if path == "":
