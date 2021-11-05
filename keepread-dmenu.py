@@ -5,7 +5,7 @@ import os
 from pynput.keyboard import Controller, Key
 
 #Variable à éditer
-path="/home/antonin/media/keepass/keepass3.kdbx"
+path=""
 print("Chemin vers la base de données : "+path)
 
 keyboard = Controller()
