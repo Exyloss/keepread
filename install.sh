@@ -1,7 +1,10 @@
 #!/bin/sh
-is_empty=$(grep "path=\"\"" keepread.py)
-[ "$is_empty" != "" ] && printf "Vous n'avez pas renseigné de base de données." && exit 1
-is_empty=$(grep "path=\"\"" keepread-dmenu.py)
-[ "$is_empty" != "" ] && printf "Vous n'avez pas renseigné de base de données." && exit 1
+printf "Veuillez renseigner un chemin vers votre base de données.\n"
+set -f
+read ans
+[ "$ans" = "" ] && exit 1
+ans=$(echo "$ans" | sed "s|~|/home/$USER|")
 cp keepread.py ~/.local/bin/keepread
 cp keepread-dmenu.py ~/.local/bin/keepread-dmenu
+sed -i "s|path=\"\"|path=\"$ans\"|" ~/.local/bin/keepread
+sed -i "s|path=\"\"|path=\"$ans\"|" ~/.local/bin/keepread-dmenu

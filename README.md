@@ -6,10 +6,9 @@
  - [pykeepass](https://github.com/libkeepass/pykeepass) (pip install pykeepass)
  - notify-send
 
-## Utiliser le script
+## Utiliser les programmes
 
-Éditez la variable "path" et renseignez-y le chemin absolu (avec /home/user/...) vers votre base de donnnées KeePass.
-Puis, lancez le script install.sh pour installer les programmes.
+Lancez le script install.sh pour modifier la variable "path" et pour installer les programmes.
 
 ## Fonctionnement
 Le script utilisant dmenu utilise le clavier pour rentrer un mot de passe, donc lorsque vous souhaitez rentrer un mot de passe, votre
