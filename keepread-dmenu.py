@@ -67,7 +67,11 @@ while True:
     if entry == None:
         print("Identifiant invalide.")
         quit()
-    entry_values = ["Mot de passe : "+entry.password, "Identifiant : "+entry.username, "supprimer", "retour"]
+    try:
+        totp = subprocess.check_output("totp.sh "+entry.get_custom_property("otp"), shell=True).decode('utf-8').replace("\n", "")
+    except:
+        totp = "Pas de TOTP"
+    entry_values = ["Mot de passe : "+entry.password, "Identifiant : "+entry.username, "TOTP : "+totp, "supprimer", "retour"]
     r = dmenu_show(["dmenu", "-l", "10", "-p", name], entry_values)
     if r == "retour":
         name = show_entries(temp)
