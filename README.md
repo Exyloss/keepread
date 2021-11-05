@@ -11,3 +11,7 @@
 Éditez la variable "path" et renseignez-y le chemin absolu (avec /home/user/...) vers votre base de donnnées KeePass.
 Puis, copiez les fichiers "keepread.py" et "keepread-dmenu.py" dans le répertoire ~/.local/bin qui doit être présent dans votre
 variable d'environnement PATH.
+
+## Fonctionnement
+Le script utilisant dmenu utilise le clavier pour rentrer un mot de passe, donc lorsque vous souhaitez rentrer un mot de passe, votre
+curseur doit se trouver dans le champ de saisie du mot de passe.
