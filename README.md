@@ -5,6 +5,7 @@
  - [dmenu](https://tools.suckless.org/dmenu/) (avec le patch "[password](https://tools.suckless.org/dmenu/patches/password/)")
  - [pykeepass](https://github.com/libkeepass/pykeepass) (pip install pykeepass)
  - notify-send
+ - [mintotp](https://github.com/susam/mintotp) (installer avec pip)
 
 ## Utiliser les programmes
 

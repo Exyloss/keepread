@@ -3,9 +3,10 @@ from pykeepass import PyKeePass as pkp
 import sys
 import getpass
 import subprocess
+import os
 
 #Variable à éditer
-path=""
+path="/home/antonin/keepass3.kdbx"
 print(path)
 
 if path == "":
@@ -59,7 +60,11 @@ else:
     entry = new_entry(sys.argv[1])
 
 while True:
-    print("m : copier mot de passe (",entry.password,")\nn : copier nom d'utilisateur (",entry.username,")\nr : séléctionner un autre id.\nl : lister les id.\nq : quitter.")
+    try:
+        totp = subprocess.check_output("totp.sh "+entry.get_custom_property("otp"), shell=True).decode('utf-8').replace("\n", "")
+    except:
+        totp = "Pas de TOTP"
+    print("m : copier mot de passe (",entry.password,")\nn : copier nom d'utilisateur (",entry.username,")\nr : séléctionner un autre id.\nl : lister les id.\nt : totp (",totp,") \nq : quitter.")
     r = input(":")
     if r == "q":
         break
@@ -70,6 +75,8 @@ while True:
     elif r == "r":
         r = input("Nom de l'id. : ")
         entry = new_entry(r)
+    elif r == "t":
+        copy(totp)
     elif r == "l":
         e = kp.find_entries(title=".*", regex=True)
         temp = ""
