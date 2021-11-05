@@ -1,9 +1,9 @@
 # KeepRead
 ## Dépendances
- - python
+ - [python](https://python.org)
  - python-pip
- - dmenu (avec le patch "password")
- - pykeepass (installer avec pip)
+ - [dmenu](https://tools.suckless.org/dmenu/) (avec le patch "[password](https://tools.suckless.org/dmenu/patches/password/)")
+ - [pykeepass](https://github.com/libkeepass/pykeepass) (pip install pykeepass)
 
 ## Utiliser le script
 
