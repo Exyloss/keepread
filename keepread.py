@@ -4,6 +4,7 @@ import sys
 import getpass
 import subprocess
 
+#Variable à éditer
 path=""
 print(path)
 
@@ -36,7 +37,7 @@ def new_entry(arg):
     return entry
 
 if sys.argv[1] == "-l":
-    e = kp.find_entries(title=".*", regex=True)
+   e = kp.find_entries(title=".*", regex=True)
     temp = ""
     for i in e:
         field = str(i).replace("/", " ").strip().split()

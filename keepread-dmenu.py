@@ -2,6 +2,7 @@
 from pykeepass import PyKeePass as pkp
 import subprocess
 
+#Variable à éditer
 path=""
 print("Chemin vers la base de données : "+path)
 
