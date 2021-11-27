@@ -1,9 +1,6 @@
 #!/bin/sh
-printf "Veuillez renseigner un chemin vers votre base de données.\n"
-set -f
-read ans
-[ "$ans" = "" ] && exit 1
-ans=$(echo "$ans" | sed "s|~|/home/$USER|")
+[ "$1" = "" ] && exit 1
+ans=$(echo "$1" | sed "s|~|/home/$USER|")
 cp keepread.py ~/.local/bin/keepread
 cp keepread-dmenu.py ~/.local/bin/keepread-dmenu
 cp totp.sh ~/.local/bin

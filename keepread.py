@@ -38,13 +38,31 @@ def new_entry(arg):
         quit()
     return entry
 
-if sys.argv[1] == "-l":
+def del_entry(arg):
+    entry = kp.find_entries(title=arg, first=True)
+    try:
+        kp.delete_entry(entry)
+        print("l'id. a bien été supprimé.")
+    except:
+        print("erreur lors de la suppression de l'id.")
+    quit()
+
+def print_entries():
     e = kp.find_entries(title=".*", regex=True)
     temp = ""
+    j = 0
     for i in e:
         field = str(i).replace("/", " ").strip().split()
-        temp += "\n"+field[2]
+        if field[1] != '"Corbeille':
+            temp += field[2]+" | "
+            j+=1
+            if j == 10:
+                temp+="\n"
+                j = 0
     print(temp)
+
+if sys.argv[1] == "-l":
+    print_entries()
     r = input("Nom de l'id. ( q = quitter ) : ")
     if r == "q":
         quit()
@@ -52,9 +70,7 @@ if sys.argv[1] == "-l":
 elif sys.argv[1] == "-d" and len(sys.argv) == 3:
     r = input("Êtes-vous sûr de vouloir supprimer l'id. "+sys.argv[2]+" ? (o/n) ")
     if r == "o":
-        kp.delete_entry(entry)
-        print("l'id. a bien été supprimé.")
-    quit()
+        del_entry(sys.argv[2])
 else:
     entry = new_entry(sys.argv[1])
 
@@ -63,7 +79,13 @@ while True:
         totp = subprocess.check_output("totp.sh "+entry.get_custom_property("otp"), shell=True).decode('utf-8').replace("\n", "")
     except:
         totp = "Pas de TOTP"
-    print("m : copier mot de passe (",entry.password,")\nn : copier nom d'utilisateur (",entry.username,")\nr : séléctionner un autre id.\nl : lister les id.\nt : totp (",totp,") \nq : quitter.")
+    print("m : copier mot de passe (",entry.password,")\n\
+n : copier nom d'utilisateur (",entry.username,")\n\
+r : séléctionner un autre id.\n\
+l : lister les id.\n\
+t : totp (",totp,") \n\
+d : supprimer l'entrée \n\
+q : quitter.")
     r = input(":")
     if r == "q":
         break
@@ -77,9 +99,6 @@ while True:
     elif r == "t":
         copy(totp)
     elif r == "l":
-        e = kp.find_entries(title=".*", regex=True)
-        temp = ""
-        for i in e:
-            field = str(i).replace("/", " ").strip().split()
-            temp += "\n"+field[2]
-        print(temp)
+        print_entries()
+    elif r == "d":
+        del_entry(entry.username)
