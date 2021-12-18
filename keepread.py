@@ -12,9 +12,6 @@ if path == "":
     print("Veuillez editer la variable path avec le chemin vers votre base de données dans le fichier keepread.py.")
     quit()
 
-if len(sys.argv) == 1:
-    print("Vous devez renseigner le nom de l'identifiant dont vous souhaitez obtenir les informations.\nPour obtenir la liste des identifiants, faire keepread.py -l")
-    quit()
 
 while True:
     r=getpass.getpass("mot de passe : ")
@@ -34,15 +31,19 @@ def copy(text):
 def new_entry(arg):
     entry = kp.find_entries(title=arg, first=True)
     if entry == None:
-        print("Erreur, l'id. n'existe pas, vous pouvez les lister avec la commande keepread.py -l")
-        quit()
-    return entry
+        if arg == "q":
+            quit()
+        else:
+            r = input("Erreur, l'id. n'existe pas.\nnom de l'id. : ")
+            return new_entry(r)
+    else:
+        return entry
 
-def del_entry(arg):
-    entry = kp.find_entries(title=arg, first=True)
+def del_entry(entry):
     try:
         kp.delete_entry(entry)
         print("l'id. a bien été supprimé.")
+        kp.save()
     except:
         print("erreur lors de la suppression de l'id.")
     quit()
@@ -52,16 +53,15 @@ def print_entries():
     temp = ""
     j = 0
     for i in e:
-        field = str(i).replace("/", " ").strip().split()
-        if field[1] != '"Corbeille':
-            temp += field[2]+" | "
-            j+=1
-            if j == 10:
+        if i.group != 'Corbeille':
+            temp += i.title+" | "
+            j+=len(i.title)+3
+            if j >= 80:
                 temp+="\n"
                 j = 0
     print(temp)
 
-if sys.argv[1] == "-l":
+if len(sys.argv) == 1 or sys.argv[1] == "-l":
     print_entries()
     r = input("Nom de l'id. ( q = quitter ) : ")
     if r == "q":
@@ -76,14 +76,24 @@ else:
 
 while True:
     try:
-        totp = subprocess.check_output("totp.sh "+entry.get_custom_property("otp"), shell=True).decode('utf-8').replace("\n", "")
+        totp = subprocess.check_output(
+            "totp.sh "+entry.get_custom_property("otp"), shell=True
+        ).decode('utf-8').replace("\n", "")
     except:
-        totp = "Pas de TOTP"
-    print("m : copier mot de passe (",entry.password,")\n\
+        totp = None
+    if totp != None:
+        print("m : copier mot de passe (",entry.password,")\n\
 n : copier nom d'utilisateur (",entry.username,")\n\
 r : séléctionner un autre id.\n\
 l : lister les id.\n\
 t : totp (",totp,") \n\
+d : supprimer l'entrée \n\
+q : quitter.")
+    else:
+        print("m : copier mot de passe (",entry.password,")\n\
+n : copier nom d'utilisateur (",entry.username,")\n\
+r : séléctionner un autre id.\n\
+l : lister les id.\n\
 d : supprimer l'entrée \n\
 q : quitter.")
     r = input(":")
@@ -94,11 +104,17 @@ q : quitter.")
     elif r == "n":
         copy(entry.username)
     elif r == "r":
+        print_entries()
         r = input("Nom de l'id. : ")
         entry = new_entry(r)
     elif r == "t":
+        totp = subprocess.check_output(
+            "totp.sh "+entry.get_custom_property("otp"), shell=True
+        ).decode('utf-8').replace("\n", "")
         copy(totp)
     elif r == "l":
         print_entries()
     elif r == "d":
-        del_entry(entry.username)
+        confirm = input("Êtes-vous sûr de vouloir supprimer l'id. "+entry.title+" ? (o/n) : ")
+        if confirm == "o":
+            del_entry(entry)
