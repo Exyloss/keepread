@@ -61,6 +61,16 @@ def print_entries():
                 j = 0
     print(temp)
 
+def print_help():
+    print("m : copier mot de passe\n\
+n : copier nom d'utilisateur\n\
+r : séléctionner un autre identifiant\n\
+l : lister les identifiants\n\
+t : copier le code totp \n\
+d : supprimer l'entrée \n\
+h : afficher cette aide \n\
+q : quitter.")
+
 if len(sys.argv) == 1 or sys.argv[1] == "-l":
     print_entries()
     r = input("Nom de l'id. ( q = quitter ) : ")
@@ -81,21 +91,12 @@ while True:
         ).decode('utf-8').replace("\n", "")
     except:
         totp = None
-    if totp != None:
-        print("m : copier mot de passe (",entry.password,")\n\
-n : copier nom d'utilisateur (",entry.username,")\n\
-r : séléctionner un autre id.\n\
-l : lister les id.\n\
-t : totp (",totp,") \n\
-d : supprimer l'entrée \n\
-q : quitter.")
+    if totp == None:
+        print("\033[4m"+entry.title+"\033[0m")
+        print("Nom d'utilisateur : "+entry.username+"\nMot de passe : "+"*"*len(entry.password))
     else:
-        print("m : copier mot de passe (",entry.password,")\n\
-n : copier nom d'utilisateur (",entry.username,")\n\
-r : séléctionner un autre id.\n\
-l : lister les id.\n\
-d : supprimer l'entrée \n\
-q : quitter.")
+        print("\033[4m"+entry.title+"\033[0m")
+        print("Nom d'utilisateur : "+entry.username+"\nMot de passe : "+"*"*len(entry.password)+"\n TOTP : "+totp)
     r = input(":")
     if r == "q":
         break
@@ -118,3 +119,5 @@ q : quitter.")
         confirm = input("Êtes-vous sûr de vouloir supprimer l'id. "+entry.title+" ? (o/n) : ")
         if confirm == "o":
             del_entry(entry)
+    elif r == "h" or r == "help":
+        print_help()
