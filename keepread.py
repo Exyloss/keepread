@@ -29,7 +29,10 @@ def del_entry(entry):
         kp.save()
     except:
         print("erreur lors de la suppression de l'id.")
-    quit()
+    r = input("Nom de l'id. : ")
+    entry = new_entry(r)
+    print_entry(entry)
+
 
 def print_entries():
     e = kp.find_entries(title=".*", regex=True)
@@ -51,6 +54,7 @@ r : séléctionner un autre identifiant\n\
 l : lister les identifiants\n\
 t : copier le code totp \n\
 d : supprimer l'entrée \n\
+a : afficher le mot de passe \n\
 h : afficher cette aide \n\
 q : quitter.")
 
@@ -67,7 +71,6 @@ def print_entry(entry):
     else:
         print("\033[4m"+entry.title+"\033[0m")
         print("Nom d'utilisateur : "+entry.username+"\nMot de passe : "+"*"*len(entry.password)+"\nTOTP : "+totp)
-
 
 #Variable à éditer
 path=""
@@ -88,21 +91,23 @@ while True:
         continue
 
 
-if len(sys.argv) == 1 or sys.argv[1] == "-l":
+if len(sys.argv) == 1:
     print_entries()
     r = input("Nom de l'id. ( q = quitter ) : ")
     if r == "q":
         quit()
     entry = new_entry(r)
-elif sys.argv[1] == "-d" and len(sys.argv) == 3:
-    r = input("Êtes-vous sûr de vouloir supprimer l'id. "+sys.argv[2]+" ? (o/n) ")
-    if r == "o":
-        del_entry(sys.argv[2])
 else:
     entry = new_entry(sys.argv[1])
 
 print_entry(entry)
 while True:
+    try:
+        totp = subprocess.check_output(
+            "totp.sh "+entry.get_custom_property("otp"), shell=True
+        ).decode('utf-8').replace("\n", "")
+    except:
+        totp = None
     r = input(":")
     if r == "q":
         break
@@ -117,13 +122,18 @@ while True:
         entry = new_entry(r)
         print_entry(entry)
     elif r == "t":
-        totp = subprocess.check_output(
-            "totp.sh "+entry.get_custom_property("otp"), shell=True
-        ).decode('utf-8').replace("\n", "")
-        copy(totp)
-        print("TOTP copié.")
+        if totp != None:
+            totp = subprocess.check_output(
+                "totp.sh "+entry.get_custom_property("otp"), shell=True
+            ).decode('utf-8').replace("\n", "")
+            copy(totp)
+            print("TOTP copié.")
+        else:
+            print("Cet identifiant de contient pas de code TOTP.")
     elif r == "l":
         print_entries()
+    elif r == "a":
+        print(entry.password)
     elif r == "d":
         confirm = input("Êtes-vous sûr de vouloir supprimer l'id. "+entry.title+" ? (o/n) : ")
         if confirm == "o":
