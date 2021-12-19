@@ -129,7 +129,7 @@ while True:
             copy(totp)
             print("TOTP copié.")
         else:
-            print("Cet identifiant de contient pas de code TOTP.")
+            print("Cet identifiant ne contient pas de code TOTP.")
     elif r == "l":
         print_entries()
     elif r == "a":
