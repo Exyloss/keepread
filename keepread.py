@@ -151,8 +151,7 @@ if path == "":
 
 
 while True:
-    #passwd=getpass.getpass("mot de passe : ")
-    passwd="1Zinzolinotoli#"
+    passwd=getpass.getpass("mot de passe : ")
     try:
         kp = pkp(path, password=passwd)
         break
