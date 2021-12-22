@@ -102,7 +102,7 @@ def create_entry():
 
 def print_entries():
     e = kp.find_entries(title=".*", regex=True)
-    temp = ""
+    temp = "| "
     j = 0
     for i in e:
         if i.group.name != 'Corbeille':
