@@ -33,6 +33,47 @@ def del_entry(entry):
     entry = new_entry(r)
     print_entry(entry)
 
+def edit_entry(entry):
+    r=""
+    print("Que souhaitez-vous faire ?")
+    print("1) éditer le nom d'utilisateur\n\
+2) éditer le mot de passe\n\
+3) éditer le titre de l'entrée\n\
+q) quitter l'éditeur\n")
+    while r != "1" and r != "2" and r != "3" and r != "q":
+        r = input(":")
+        if r == "1":
+            try:
+                s = input("Nouveau nom d'utilisateur : ")
+                kp.add_entry(entry.group, entry.title, s, entry.password)
+                kp.delete_entry(entry)
+                kp.save()
+                print("L'entrée a bien été modifiée.")
+            except:
+                print("Erreur lors de la modification de l'entrée.")
+        elif r == "2":
+            try:
+                s = getpass.getpass("Nouveau mot de passe : ")
+                kp.add_entry(entry.group, entry.title, entry.username, s)
+                kp.delete_entry(entry)
+                kp.save()
+                print("L'entrée a bien été modifiée.")
+            except:
+                print("Erreur lors de la modification de l'entrée.")
+        elif r == "3":
+            try:
+                s = input("Nouveau titre de l'entrée : ")
+                kp.add_entry(entry.group, s, entry.username, entry.password)
+                kp.delete_entry(entry)
+                kp.save()
+                print("L'entrée a bien été modifiée.")
+            except:
+                print("Erreur lors de la modification de l'entrée.")
+    print_entries()
+    r = input("Nom de l'id. : ")
+    entry = new_entry(r)
+    print_entry(entry)
+
 
 def print_entries():
     e = kp.find_entries(title=".*", regex=True)
@@ -55,6 +96,7 @@ l : lister les identifiants\n\
 t : copier le code totp \n\
 d : supprimer l'entrée \n\
 a : afficher le mot de passe \n\
+e : éditer cette entrée \n\
 h : afficher cette aide \n\
 q : quitter.")
 
@@ -134,6 +176,8 @@ while True:
         print_entries()
     elif r == "a":
         print(entry.password)
+    elif r == "e":
+        edit_entry(entry)
     elif r == "d":
         confirm = input("Êtes-vous sûr de vouloir supprimer l'id. "+entry.title+" ? (o/n) : ")
         if confirm == "o":
