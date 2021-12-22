@@ -22,6 +22,7 @@ def new_entry(arg):
     else:
         return entry
 
+
 def del_entry(entry):
     try:
         kp.delete_entry(entry)
@@ -74,13 +75,38 @@ q) quitter l'éditeur\n")
     entry = new_entry(r)
     print_entry(entry)
 
+def create_entry():
+    groups = kp.groups
+    temp = "| "
+    print("Groupes disponibles : ")
+    for i in groups:
+        temp += i.name+" | "
+        if len(temp.split("\n")[-1]) >= 80:
+            temp+="\n"
+    print(temp)
+    g = input("Groupe de l'entrée : ")
+    g = kp.find_groups(name=g, first=True)
+    if g == None:
+        g = kp.root_group
+        print("Erreur, groupe inconnu, utilisation du groupe racine.")
+    t = input("Titre de l'entrée : ")
+    r = input("Nom d'utilisateur : ")
+    s = input("Mot de passe : ")
+    kp.add_entry(g, t, r, s)
+    kp.save()
+    print("Entrée créée.")
+    print_entries()
+    r = input("Nom de l'id. : ")
+    entry = new_entry(r)
+    print_entry(entry)
+    quit()
 
 def print_entries():
     e = kp.find_entries(title=".*", regex=True)
     temp = ""
     j = 0
     for i in e:
-        if i.group != 'Corbeille':
+        if i.group.name != 'Corbeille':
             temp += i.title+" | "
             j+=len(i.title)+3
             if j >= 80:
@@ -97,6 +123,7 @@ t : copier le code totp \n\
 d : supprimer l'entrée \n\
 a : afficher le mot de passe \n\
 e : éditer cette entrée \n\
+n : créer une nouvelle entrée \n\
 h : afficher cette aide \n\
 q : quitter.")
 
@@ -124,14 +151,14 @@ if path == "":
 
 
 while True:
-    r=getpass.getpass("mot de passe : ")
+    #passwd=getpass.getpass("mot de passe : ")
+    passwd="1Zinzolinotoli#"
     try:
-        kp = pkp(path, password=r)
+        kp = pkp(path, password=passwd)
         break
     except:
         print("Mot de passe erroné.")
         continue
-
 
 if len(sys.argv) == 1:
     print_entries()
@@ -139,6 +166,8 @@ if len(sys.argv) == 1:
     if r == "q":
         quit()
     entry = new_entry(r)
+elif sys.argv[1] == "-n":
+    create_entry()
 else:
     entry = new_entry(sys.argv[1])
 
@@ -178,6 +207,8 @@ while True:
         print(entry.password)
     elif r == "e":
         edit_entry(entry)
+    elif r == "n":
+        create_entry()
     elif r == "d":
         confirm = input("Êtes-vous sûr de vouloir supprimer l'id. "+entry.title+" ? (o/n) : ")
         if confirm == "o":
