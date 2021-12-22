@@ -99,7 +99,6 @@ def create_entry():
     r = input("Nom de l'id. : ")
     entry = new_entry(r)
     print_entry(entry)
-    quit()
 
 def print_entries():
     e = kp.find_entries(title=".*", regex=True)
