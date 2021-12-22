@@ -206,7 +206,7 @@ while True:
         print(entry.password)
     elif r == "e":
         edit_entry(entry)
-    elif r == "n":
+    elif r == "c":
         create_entry()
     elif r == "d":
         confirm = input("Êtes-vous sûr de vouloir supprimer l'id. "+entry.title+" ? (o/n) : ")
