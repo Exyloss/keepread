@@ -157,8 +157,6 @@ while True:
 if len(sys.argv) == 1:
     print_entries()
     r = input("Nom de l'id. ( q = quitter ) : ")
-    if r == "q":
-        quit()
     entry = new_entry(r)
 elif sys.argv[1] == "-n":
     create_entry()
