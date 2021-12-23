@@ -95,14 +95,10 @@ def create_entry():
     kp.add_entry(g, t, r, s)
     kp.save()
     print("Entrée créée.")
-    print_entries()
-    r = input("Nom de l'id. : ")
-    entry = new_entry(r)
-    print_entry(entry)
 
 def print_entries():
     e = kp.find_entries(title=".*", regex=True)
-    temp = "| "
+    temp = ""
     j = 0
     for i in e:
         if i.group.name != 'Corbeille':
@@ -166,6 +162,9 @@ if len(sys.argv) == 1:
     entry = new_entry(r)
 elif sys.argv[1] == "-n":
     create_entry()
+    print_entries()
+    r = input("Nom de l'id. : ")
+    entry = new_entry(r)
 else:
     entry = new_entry(sys.argv[1])
 
@@ -205,7 +204,7 @@ while True:
         print(entry.password)
     elif r == "e":
         edit_entry(entry)
-    elif r == "c":
+    elif r == "n":
         create_entry()
     elif r == "d":
         confirm = input("Êtes-vous sûr de vouloir supprimer l'id. "+entry.title+" ? (o/n) : ")
