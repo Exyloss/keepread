@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from pykeepass import PyKeePass as pkp
+from random import randint
 import sys
 import getpass
 import subprocess
@@ -9,6 +10,28 @@ def copy(text):
     p = subprocess.Popen(['xclip', '-selection', "clip"],
                          stdin=subprocess.PIPE, close_fds=True)
     p.communicate(input=text.encode('utf-8'))
+
+def pass_gen():
+    choice = "n"
+    while choice == "n":
+        chars="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+        inp = input("Inclure les caractères spéciaux ? (o/n) ")
+        if inp == "o":
+            chars += "&?,.;/:!#@+-*/=_()[]çàéè~"
+        len_chars=len(chars)
+        try:
+            inp = int(input("Longueur du mot de passe (12 par défaut) : "))
+            len_pass = inp
+        except:
+            len_pass=12
+        passwd=""
+        for i in range(len_pass):
+            passwd += chars[randint(0,len_chars-1)]
+        inp = input(passwd+" : Ce mot de passe vous convient-il ? (o/n) ")
+        if inp == "o":
+            choice = "o"
+    return passwd
+
 
 def new_entry(arg):
     entry = kp.find_entries(title=arg, first=True)
@@ -90,8 +113,18 @@ def create_entry():
         g = kp.root_group
         print("Erreur, groupe inconnu, utilisation du groupe racine.")
     t = input("Titre de l'entrée : ")
+    while t == "":
+        t = input("Titre de l'entrée : ")
     r = input("Nom d'utilisateur : ")
+    if r == "":
+        r = "Non-renseigné"
     s = input("Mot de passe : ")
+    if s == "":
+        inp = input("Souhaitez-vous renseigner un mot de passe aléatoire ? (o/n) ")
+        if inp == "n":
+            s = "Non-renseigné"
+        else:
+            s = pass_gen()
     kp.add_entry(g, t, r, s)
     kp.save()
     print("Entrée créée.")
@@ -111,7 +144,7 @@ def print_entries():
 
 def print_help():
     print("m : copier mot de passe\n\
-n : copier nom d'utilisateur\n\
+u : copier nom d'utilisateur\n\
 r : séléctionner un autre identifiant\n\
 l : lister les identifiants\n\
 t : copier le code totp \n\
@@ -180,7 +213,7 @@ while True:
     elif r == "m":
         copy(entry.password)
         print("Mot de passe copié.")
-    elif r == "n":
+    elif r == "u":
         copy(entry.username)
         print("Nom d'utilisateur copié.")
     elif r == "r":
@@ -204,6 +237,7 @@ while True:
         edit_entry(entry)
     elif r == "n":
         create_entry()
+        print_entry(entry)
     elif r == "d":
         confirm = input("Êtes-vous sûr de vouloir supprimer l'id. "+entry.title+" ? (o/n) : ")
         if confirm == "o":

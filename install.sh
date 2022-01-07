@@ -3,6 +3,7 @@
 ans=$(echo "$1" | sed "s|~|/home/$USER|")
 cp keepread.py ~/.local/bin/keepread
 cp keepread-dmenu.py ~/.local/bin/keepread-dmenu
+cp pass_gen.py ~/.local/bin/
 cp totp.sh ~/.local/bin
 sed -i "s|path=\"\"|path=\"$ans\"|" ~/.local/bin/keepread
 sed -i "s|path=\"\"|path=\"$ans\"|" ~/.local/bin/keepread-dmenu
