@@ -4,6 +4,7 @@ from random import randint
 import sys
 import getpass
 import subprocess
+import keyring
 
 def copy(text):
     text = str(text)
@@ -53,9 +54,6 @@ def del_entry(entry):
         kp.save()
     except:
         print("erreur lors de la suppression de l'id.")
-    r = input("Nom de l'id. : ")
-    entry = new_entry(r)
-    print_entry(entry)
 
 def edit_entry(entry):
     r=""
@@ -120,11 +118,11 @@ def create_entry():
         r = "Non-renseigné"
     s = input("Mot de passe : ")
     if s == "":
-        inp = input("Souhaitez-vous renseigner un mot de passe aléatoire ? (o/n) ")
-        if inp == "n":
-            s = "Non-renseigné"
-        else:
+        inp = input("Souhaitez-vous utiliser un mot de passe aléatoire ? (o/n) ")
+        if inp == "o":
             s = pass_gen()
+        else:
+            s = "Non-renseigné"
     kp.add_entry(g, t, r, s)
     kp.save()
     print("Entrée créée.")
@@ -162,30 +160,52 @@ def print_entry(entry):
         ).decode('utf-8').replace("\n", "")
     except:
         totp = None
+    if entry.username == None:
+        usr = "Non-renseigné"
+    else:
+        usr = entry.username
+
+    if entry.password == None:
+        passwd = ""
+    else:
+        passwd = entry.password
+
     if totp == None:
         print("\033[4m"+entry.title+"\033[0m")
-        print("Nom d'utilisateur : "+entry.username+"\nMot de passe : "+"*"*len(entry.password))
+        print("Nom d'utilisateur : "+usr+"\nMot de passe : "+"*"*len(passwd))
     else:
         print("\033[4m"+entry.title+"\033[0m")
-        print("Nom d'utilisateur : "+entry.username+"\nMot de passe : "+"*"*len(entry.password)+"\nTOTP : "+totp)
+        print("Nom d'utilisateur : "+usr+"\nMot de passe : "+"*"*len(passwd)+"\nTOTP : "+totp)
 
-#Variable à éditer
+#Variables à éditer
 path=""
+key=True
 print(path)
 
 if path == "":
     print("Veuillez editer la variable path avec le chemin vers votre base de données dans le fichier keepread.py.")
     quit()
 
-
-while True:
-    passwd=getpass.getpass("mot de passe : ")
+if key == True:
     try:
+        passwd = keyring.get_password("system", "keepass")
         kp = pkp(path, password=passwd)
-        break
     except:
-        print("Mot de passe erroné.")
-        continue
+        passwd = None
+else:
+    passwd = None
+
+if passwd == None:
+    while True:
+        passwd=getpass.getpass("mot de passe : ")
+        try:
+            kp = pkp(path, password=passwd)
+            break
+        except:
+            print("Mot de passe erroné.")
+            continue
+    keyring.set_password("system", "keepass", passwd)
+
 
 if len(sys.argv) == 1:
     print_entries()
@@ -242,5 +262,9 @@ while True:
         confirm = input("Êtes-vous sûr de vouloir supprimer l'id. "+entry.title+" ? (o/n) : ")
         if confirm == "o":
             del_entry(entry)
+            print_entries()
+            r = input("Nom de l'id. : ")
+            entry = new_entry(r)
+            print_entry(entry)
     elif r == "h" or r == "help":
         print_help()
