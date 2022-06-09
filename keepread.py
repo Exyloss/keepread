@@ -180,7 +180,6 @@ def print_entry(entry):
 #Variables à éditer
 path=""
 key=True
-print(path)
 
 if path == "":
     print("Veuillez editer la variable path avec le chemin vers votre base de données dans le fichier keepread.py.")

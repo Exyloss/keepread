@@ -3,6 +3,7 @@ from pykeepass import PyKeePass as pkp
 import subprocess
 import os
 from pynput.keyboard import Controller, Key
+import keyring
 
 #Variable à éditer
 path=""
@@ -10,6 +11,19 @@ print("Chemin vers la base de données : "+path)
 
 keyboard = Controller()
 
+key = True
+passwd = None
+
+if path == "":
+    print("Veuillez editer la variable path avec le chemin vers votre base de données dans le fichier keepread.py.")
+    quit()
+
+if key == True:
+    try:
+        passwd = keyring.get_password("system", "keepass")
+        kp = pkp(path, password=passwd)
+    except:
+        passwd = None
 
 if path == "":
     print("Veuillez editer la variable path avec le chemin vers votre base de données dans le fichier keepread.py.")
@@ -45,19 +59,22 @@ def show_entries(temp):
 
 
 while True:
-    r=dmenu_show(["dmenu", "-p", "mot de passe", "-P"],"")
+    if passwd == None:
+        passwd = dmenu_show(["dmenu", "-p", "mot de passe", "-P"],"")
     try:
-        kp = pkp(path, password=r)
+        kp = pkp(path, password=passwd)
         break
     except:
         os.system('notify-send "Mot de passe erroné."')
+        passwd = None
         continue
 
 e = kp.find_entries(title=".*", regex=True)
 temp = []
 for i in e:
-    field = str(i).replace("/", " ").strip().split()
-    temp.append(field[2])
+    if i.group.name != 'Corbeille':
+        #field = str(i).replace("/", " ").strip().split()
+        temp.append(i.title)
 name = show_entries(temp)
 while True:
     if name == "":
@@ -79,6 +96,7 @@ while True:
         r = dmenu_show(["dmenu", "-l", "10", "-p", "Êtes-vous sûr de vouloir supprimer "+name+" ?"], ["oui", "non"])
         if r == "oui":
             kp.delete_entry(entry)
+            kp.save()
         name = show_entries(temp)
     else:
         proc = subprocess.Popen(["notify-send", r+" rentré"])
