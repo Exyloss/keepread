@@ -5,6 +5,8 @@ import sys
 import getpass
 import subprocess
 import keyring
+import argparse
+import os
 
 def copy(text):
     text = str(text)
@@ -206,17 +208,39 @@ if passwd == None:
     keyring.set_password("system", "keepass", passwd)
 
 
-if len(sys.argv) == 1:
+parser = argparse.ArgumentParser(description='Lecteur de BDD Keepass en ligne de commande')
+parser.add_argument('title', metavar='N', type=str, nargs='?',
+                    help='nom de l\'entrée à rechercher')
+parser.add_argument('--password', metavar='N', type=str, nargs='?',
+                    help='mot de passe')
+parser.add_argument('--username', metavar='N', type=str, nargs='?',
+                    help='nom d\'utilisateur')
+
+args = parser.parse_args()
+
+if not os.path.isfile(args.bdd) and os.path.exists(args.bdd):
+    print("Erreur")
+    quit()
+
+if args.username != None:
+    entry = new_entry(args.username)
+    print(entry.username)
+    quit()
+elif args.password != None:
+    entry = new_entry(args.password)
+    print(entry.password)
+    quit()
+
+if args.title != None:
+    try:
+        entry = new_entry(args.title)
+    except:
+        print_entries()
+        r = input("Nom de l'id. ( q = quitter ) : ")
+else:
     print_entries()
     r = input("Nom de l'id. ( q = quitter ) : ")
-    entry = new_entry(r)
-elif sys.argv[1] == "-n":
-    create_entry()
-    print_entries()
-    r = input("Nom de l'id. : ")
-    entry = new_entry(r)
-else:
-    entry = new_entry(sys.argv[1])
+
 
 print_entry(entry)
 while True:
