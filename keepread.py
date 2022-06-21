@@ -7,6 +7,8 @@ import subprocess
 import keyring
 import argparse
 import os
+from configparser import ConfigParser
+
 
 def copy(text):
     text = str(text)
@@ -179,15 +181,16 @@ def print_entry(entry):
         print("\033[4m"+entry.title+"\033[0m")
         print("Nom d'utilisateur : "+usr+"\nMot de passe : "+"*"*len(passwd)+"\nTOTP : "+totp)
 
-#Variables à éditer
-path=""
-key=False
+config = ConfigParser()
+config.read(os.environ["XDG_CONFIG_HOME"]+"/keepread/config.ini")
+path = config["conf"]["path"]
+key = config["conf"]["keyring"]
 
 if path == "":
     print("Veuillez editer la variable path avec le chemin vers votre base de données dans le fichier keepread.py.")
     quit()
 
-if key == True:
+if key == "True":
     try:
         passwd = keyring.get_password("system", "keepass")
         kp = pkp(path, password=passwd)
@@ -233,9 +236,11 @@ if args.title != None:
     except:
         print_entries()
         r = input("Nom de l'id. ( q = quitter ) : ")
+        entry = new_entry(r)
 else:
     print_entries()
     r = input("Nom de l'id. ( q = quitter ) : ")
+    entry = new_entry(r)
 
 
 print_entry(entry)
