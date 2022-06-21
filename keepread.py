@@ -181,7 +181,7 @@ def print_entry(entry):
 
 #Variables à éditer
 path=""
-key=True
+key=False
 
 if path == "":
     print("Veuillez editer la variable path avec le chemin vers votre base de données dans le fichier keepread.py.")
@@ -217,10 +217,6 @@ parser.add_argument('--username', metavar='N', type=str, nargs='?',
                     help='nom d\'utilisateur')
 
 args = parser.parse_args()
-
-if not os.path.isfile(args.bdd) and os.path.exists(args.bdd):
-    print("Erreur")
-    quit()
 
 if args.username != None:
     entry = new_entry(args.username)
