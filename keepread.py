@@ -10,6 +10,15 @@ import os
 from configparser import ConfigParser
 
 
+config = ConfigParser()
+parser = argparse.ArgumentParser(description='Lecteur de BDD Keepass en ligne de commande')
+parser.add_argument('title', metavar='N', type=str, nargs='?',
+                    help='nom de l\'entrée à rechercher')
+parser.add_argument('--password', metavar='N', type=str, nargs='?',
+                    help='mot de passe')
+parser.add_argument('--username', metavar='N', type=str, nargs='?',
+                    help='nom d\'utilisateur')
+parser.add_argument('--list', action='store_true', help='liste le nom des entrées disponibles')
 def copy(text):
     text = str(text)
     p = subprocess.Popen(['xclip', '-selection', "clip"],
@@ -181,7 +190,6 @@ def print_entry(entry):
         print("\033[4m"+entry.title+"\033[0m")
         print("Nom d'utilisateur : "+usr+"\nMot de passe : "+"*"*len(passwd)+"\nTOTP : "+totp)
 
-config = ConfigParser()
 config.read(os.environ["XDG_CONFIG_HOME"]+"/keepread/config.ini")
 path = config["conf"]["path"]
 key = config["conf"]["keyring"]
@@ -210,15 +218,6 @@ if passwd == None:
             continue
     keyring.set_password("system", "keepass", passwd)
 
-
-parser = argparse.ArgumentParser(description='Lecteur de BDD Keepass en ligne de commande')
-parser.add_argument('title', metavar='N', type=str, nargs='?',
-                    help='nom de l\'entrée à rechercher')
-parser.add_argument('--password', metavar='N', type=str, nargs='?',
-                    help='mot de passe')
-parser.add_argument('--username', metavar='N', type=str, nargs='?',
-                    help='nom d\'utilisateur')
-
 args = parser.parse_args()
 
 if args.username != None:
@@ -228,6 +227,12 @@ if args.username != None:
 elif args.password != None:
     entry = new_entry(args.password)
     print(entry.password)
+    quit()
+elif args.list == True:
+    e = kp.find_entries(title=".*", regex=True)
+    for i in e:
+        if i.group.name != 'Corbeille':
+            print(i.title)
     quit()
 
 if args.title != None:
