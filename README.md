@@ -11,7 +11,12 @@
 ## Utiliser les programmes
 
 Lancez le script install.sh pour modifier la variable "path" et pour installer les programmes.
-Lancez kwalletd5 en fond de tâche si vous souhaitez utiliser le keyring afin de sauvegarder le mot de passe.
+Lancez 
+```
+export $(gnome-keyring-daemon --start)
+source /etc/X11/xinit/xinitrc.d/50-systemd-user.sh
+```
+au lancement de votre système si vous souhaitez utiliser le keyring afin de sauvegarder le mot de passe.
 
 ## Fonctionnement
 Le script utilisant dmenu utilise le clavier pour rentrer un mot de passe, donc lorsque vous souhaitez rentrer un mot de passe, votre
