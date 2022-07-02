@@ -203,7 +203,12 @@ if key == "True":
         passwd = keyring.get_password("system", "keepass")
         kp = pkp(path, password=passwd)
     except:
-        passwd = None
+        try:
+            keyring.set_password("system", "keepass", passwd)
+            passwd = keyring.get_password("system", "keepass")
+            kp = pkp(path, password=passwd)
+        except:
+            passwd = None
 else:
     passwd = None
 
@@ -216,7 +221,6 @@ if passwd == None:
         except:
             print("Mot de passe erroné.")
             continue
-    keyring.set_password("system", "keepass", passwd)
 
 args = parser.parse_args()
 

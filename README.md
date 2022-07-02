@@ -6,7 +6,7 @@
  - [pykeepass](https://github.com/libkeepass/pykeepass) (pip install pykeepass)
  - notify-send
  - [mintotp](https://github.com/susam/mintotp) (installer avec pip)
- - kwallet (optionel)
+ - gnome-keyring (optionel)
 
 ## Utiliser les programmes
 
@@ -14,7 +14,7 @@ Lancez le script install.sh pour modifier la variable "path" et pour installer l
 Lancez 
 ```
 export $(gnome-keyring-daemon --start)
-source /etc/X11/xinit/xinitrc.d/50-systemd-user.sh
+keyring-startup.sh &
 ```
 au lancement de votre système si vous souhaitez utiliser le keyring afin de sauvegarder le mot de passe.
 
