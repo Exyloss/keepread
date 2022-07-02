@@ -19,6 +19,8 @@ parser.add_argument('--password', metavar='N', type=str, nargs='?',
 parser.add_argument('--username', metavar='N', type=str, nargs='?',
                     help='nom d\'utilisateur')
 parser.add_argument('--list', action='store_true', help='liste le nom des entrées disponibles')
+parser.add_argument('--totp', metavar='N', type=str, nargs='?',
+                    help='code TOTP')
 def copy(text):
     text = str(text)
     p = subprocess.Popen(['xclip', '-selection', "clip"],
@@ -47,15 +49,15 @@ def pass_gen():
     return passwd
 
 
-def new_entry(arg):
+def new_entry(arg, inp=True):
     entry = kp.find_entries(title=arg, first=True)
     if entry == None:
-        if arg == "q":
-            quit()
-        else:
+        if inp and arg != "q":
             print_entries()
             r = input("Erreur, l'id. n'existe pas.\nnom de l'id. : ")
             return new_entry(r)
+        else:
+            quit()
     else:
         return entry
 
@@ -223,21 +225,30 @@ if passwd == None:
             continue
 
 args = parser.parse_args()
-
 if args.username != None:
-    entry = new_entry(args.username)
-    print(entry.username)
-    quit()
-elif args.password != None:
-    entry = new_entry(args.password)
-    print(entry.password)
-    quit()
-elif args.list == True:
+    entry = new_entry(args.username, inp=False)
+    print("nom d'utilisateur:"+entry.username)
+if args.password != None:
+    entry = new_entry(args.password, inp=False)
+    print("mot de passe:"+entry.password)
+if args.list == True:
     e = kp.find_entries(title=".*", regex=True)
     for i in e:
         if i.group.name != 'Corbeille':
             print(i.title)
+if args.totp != None:
+    entry = new_entry(args.totp, inp=False)
+    try:
+        totp = subprocess.check_output(
+            "totp.sh "+entry.otp, shell=True
+        ).decode('utf-8').replace("\n", "")
+        print("totp:"+totp)
+    except:
+        quit()
+
+if args.totp != None or args.list == True or args.username != None or args.password != None:
     quit()
+
 
 if args.title != None:
     try:
@@ -276,7 +287,7 @@ while True:
     elif r == "t":
         if totp != None:
             totp = subprocess.check_output(
-                "totp.sh "+entry.get_custom_property("otp"), shell=True
+                "totp.sh "+entry.otp, shell=True
             ).decode('utf-8').replace("\n", "")
             copy(totp)
             print("TOTP copié.")
