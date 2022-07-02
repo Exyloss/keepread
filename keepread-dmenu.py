@@ -2,8 +2,9 @@
 from pykeepass import PyKeePass as pkp
 import subprocess
 import os
-from pynput.keyboard import Controller, Key
+from pynput.keyboard import Controller
 import keyring
+from configparser import ConfigParser
 
 #Variable à éditer
 path=""
@@ -11,19 +12,19 @@ print("Chemin vers la base de données : "+path)
 
 keyboard = Controller()
 
-key = True
 passwd = None
+config = ConfigParser()
+config.read(os.environ["XDG_CONFIG_HOME"]+"/keepread/config.ini")
+path = config["conf"]["path"]
+key = config["conf"]["keyring"]
 
 if path == "":
     print("Veuillez editer la variable path avec le chemin vers votre base de données dans le fichier keepread.py.")
     quit()
 
-if key == True:
-    try:
-        passwd = keyring.get_password("system", "keepass")
-        kp = pkp(path, password=passwd)
-    except:
-        passwd = None
+if key == "True":
+    passwd = keyring.get_password("system", "keepass")
+    kp = pkp(path, password=passwd)
 
 if path == "":
     print("Veuillez editer la variable path avec le chemin vers votre base de données dans le fichier keepread.py.")
