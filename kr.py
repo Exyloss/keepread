@@ -55,8 +55,8 @@ if key == "True":
 else:
     pw = getpass("mot de passe:")
 
-
 kp = pkp(path, password=pw)
+pw = ""
 
 if args.title != None:
     entry = search_entry(kp, args.title)
