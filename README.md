@@ -9,7 +9,10 @@
  - gnome-keyring (optionel)
 
 ## Utiliser les programmes
-
+Installer les dépendances python :
+```
+pip install -r requirements.txt && pip install -e .
+```
 Lancez le script install.sh pour modifier la variable "path" et pour installer les programmes.
 Lancez 
 ```

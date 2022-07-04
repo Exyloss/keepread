@@ -1,0 +1,4 @@
+mintotp
+pykeepass
+pynput
+keyring
