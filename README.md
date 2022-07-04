@@ -13,7 +13,8 @@ Installer les dépendances python :
 pip install -r requirements.txt && pip install -e .
 ```
 Lancez le script install.sh pour initialiser la configuration et pour installer les programmes.
-Lancez 
+
+Lancez aussi
 ```
 export $(gnome-keyring-daemon --start)
 keyring-startup.sh &
