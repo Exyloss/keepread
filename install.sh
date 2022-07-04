@@ -10,5 +10,5 @@ read ans2
 echo "Fichier de config:"
 cat "$XDG_CONFIG_HOME"/keepread/config.ini
 cp keepread.py ~/.local/bin/keepread
-cp keepread-dmenu.py ~/.local/bin/keepread-dmenu
+cp dkr.py ~/.local/bin/dkr
 cp totp.sh ~/.local/bin

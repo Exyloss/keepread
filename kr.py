@@ -2,6 +2,9 @@
 from keeplib import *
 import keyring
 import argparse
+import os
+from getpass import getpass
+from configparser import ConfigParser
 
 def pyfzf(items):
     if items != "":
@@ -42,7 +45,18 @@ parser.add_argument("title", metavar="entrée", type=str, nargs="?",
         help="nom de l'entrée à rechercher")
 args = parser.parse_args()
 
-kp = pkp("/home/antonin/media/keepass/keepass3.kdbx", password=keyring.get_password("system", "keepass"))
+config = ConfigParser()
+config.read(os.environ["XDG_CONFIG_HOME"]+"/keepread/config.ini")
+path = config["conf"]["path"]
+key = config["conf"]["keyring"]
+
+if key == "True":
+    pw = keyring.get_password("system", "keepass")
+else:
+    pw = getpass("mot de passe:")
+
+
+kp = pkp(path, password=pw)
 
 if args.title != None:
     entry = search_entry(kp, args.title)
@@ -123,7 +137,7 @@ while True:
                     print(i+":"+vals[i])
 
     else:
-        print("")
+        print("sélectionner une entrée:")
         entry_title = pyfzf(entries)
         if entry_title in entries:
             entry = search_entry(kp, entry_title)
