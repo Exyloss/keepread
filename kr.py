@@ -6,36 +6,6 @@ import os
 from getpass import getpass
 from configparser import ConfigParser
 
-def pyfzf(items):
-    if items != "":
-        try:
-            proc = subprocess.Popen(
-                ["fzy"],
-                universal_newlines=True,
-                stdin=subprocess.PIPE,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE)
-        except OSError as err:
-            print("erreur lors du lancement de fzy")
-
-        with proc.stdin:
-            if isinstance(items, list):
-                for item in items:
-                    proc.stdin.write(item)
-                    proc.stdin.write('\n')
-            elif isinstance(items, str):
-                proc.stdin.write(items)
-    else:
-        return -1
-
-    if proc.wait() == 0:
-        return proc.stdout.read().rstrip('\n')
-
-    stderr = proc.stderr.read()
-
-    if stderr == '':
-        return -1
-
 parser = argparse.ArgumentParser(description="Lecteur de base de données keepass.")
 parser.add_argument("--password", action="store_true",
         help="obtenir le mot de passe de l'entrée recherchée")
@@ -104,12 +74,12 @@ while True:
                 else:
                     print("erreur, il n'y a pas de totp sur cette entrée.")
             elif r == "r":
-                entry_title = pyfzf(entries)
+                entry_title = prompt_sel(entries)
                 entry = search_entry(kp, entry_title)
                 break
             elif r == "d":
                 print("êtes-vous sûr de vouloir supprimer cette entrée ?")
-                confirm = pyfzf(["oui", "non"])
+                confirm = prompt_sel(["oui", "non"])
                 if confirm == "oui":
                     exit_code = del_entry(kp, entry)
                     if exit_code == 0:
@@ -122,7 +92,7 @@ while True:
                     print("l'entrée n'a pas été supprimée.")
             elif r == "n":
                 groups = get_groups(kp)
-                group = pyfzf(groups)
+                group = prompt_sel(groups)
                 if group == -1: pass
                 title = input("titre (laisser vide pour annuler):")
                 if title == "": pass
@@ -138,7 +108,7 @@ while True:
 
     else:
         print("sélectionner une entrée:")
-        entry_title = pyfzf(entries)
+        entry_title = prompt_sel(entries)
         if entry_title in entries:
             entry = search_entry(kp, entry_title)
         elif entry_title == -1:

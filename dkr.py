@@ -10,38 +10,8 @@ def write_str(string):
     for i in string:
         keyboard.press(i)
 
-def dmenu_show(args,items):
-    if items != "":
-        try:
-            proc = subprocess.Popen(
-                args,
-                universal_newlines=True,
-                stdin=subprocess.PIPE,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE)
-        except OSError as err:
-            print("erreur lors du lancement de dmenu")
-
-        with proc.stdin:
-            if isinstance(items, list):
-                for item in items:
-                    proc.stdin.write(item)
-                    proc.stdin.write('\n')
-            elif isinstance(items, str):
-                proc.stdin.write(items)
-    else:
-        proc = subprocess.Popen(args)
-
-    if proc.wait() == 0:
-        return proc.stdout.read().rstrip('\n')
-
-    stderr = proc.stderr.read()
-
-    if stderr == '':
-        return -1
-
 def show_entries(temp, prompt=""):
-    name = dmenu_show(["dmenu", "-l", "10", "-p", prompt], temp)
+    name = prompt_sel(["dmenu", "-l", "10", "-p", prompt], temp)
     return name
 
 keyboard = Controller()
