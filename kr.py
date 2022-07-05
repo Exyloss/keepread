@@ -67,6 +67,7 @@ while True:
                 print("r: sélectionner une nouvelle entrée")
                 print("n: créer une nouvelle entrée")
                 print("d: supprimer l'entrée")
+                print("e: éditer l'entrée")
                 print("q: quitter")
             elif r == "u":
                 copy(vals["nom d'utilisateur"])
@@ -97,22 +98,39 @@ while True:
             elif r == "n":
                 groups = get_groups(kp)
                 group = pyfzf(groups)
-                if group == -1: pass
+                if group == -1: continue
                 title = input("titre (laisser vide pour annuler):")
-                if title == "": pass
+                if title == "": continue
                 username = input("nom d'utilisateur:")
-                if username == "": pass
+                if username == "": continue
                 passwd = input("mot de passe:")
-                if passwd == "": pass
+                if passwd == "": continue
                 create_entry(kp, group, title, username, passwd)
                 entries = get_entries(kp)
             elif r == "a":
+                print("\033[4m"+entry.title+"\033[0;0m")
                 for i in vals:
                     print(i+":"+vals[i])
+            elif r == "e":
+                print("1) éditer le nom d'utilisateur")
+                print("2) éditer le mot de passe")
+                print("3) éditer le titre de l'entrée")
+                r = input(":")
+                if r == "1":
+                    uname = input("nouveau nom d'utilisateur:")
+                    edit_entry(kp, entry, uname, entry.password, entry.title)
+                elif r == "2":
+                    passwd = input("nouveau mot de passe:")
+                    edit_entry(kp, entry, entry.username, passwd, entry.title)
+                elif r == "3":
+                    title = input("nouveau titre:")
+                    edit_entry(kp, entry, entry.username, entry.password, title)
+                entries = get_entries(kp)
+
 
     else:
         print("sélectionner une entrée:")
-        entry_title = pyfzf(entries)
+        entry_title = prompt_sel(["fzy"], entries)
         if entry_title in entries:
             entry = search_entry(kp, entry_title)
         elif entry_title == -1:

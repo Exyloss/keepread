@@ -94,7 +94,7 @@ def get_entries(kp):
     e = kp.find_entries(title=".*", regex=True)
     entries = []
     for i in e:
-        if i.group.name != 'Corbeille':
+        if i.group.name != 'Corbeille' and i.title != None:
             entries.append(i.title)
     return entries
 
