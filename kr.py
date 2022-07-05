@@ -6,6 +6,9 @@ import os
 from getpass import getpass
 from configparser import ConfigParser
 
+def pyfzf(items):
+    return prompt_sel(["fzy"], items)
+
 parser = argparse.ArgumentParser(description="Lecteur de base de données keepass.")
 parser.add_argument("--password", action="store_true",
         help="obtenir le mot de passe de l'entrée recherchée")
@@ -48,6 +51,7 @@ entries = get_entries(kp)
 while True:
     if entry != 1:
         vals = entry_values(entry)
+        print("\033[4m"+entry.title+"\033[0;0m")
         for i in vals:
             print(i+":"+vals[i])
         while True:
@@ -74,12 +78,12 @@ while True:
                 else:
                     print("erreur, il n'y a pas de totp sur cette entrée.")
             elif r == "r":
-                entry_title = prompt_sel(entries)
+                entry_title = pyfzf(entries)
                 entry = search_entry(kp, entry_title)
                 break
             elif r == "d":
                 print("êtes-vous sûr de vouloir supprimer cette entrée ?")
-                confirm = prompt_sel(["oui", "non"])
+                confirm = pyfzf(["oui", "non"])
                 if confirm == "oui":
                     exit_code = del_entry(kp, entry)
                     if exit_code == 0:
@@ -92,7 +96,7 @@ while True:
                     print("l'entrée n'a pas été supprimée.")
             elif r == "n":
                 groups = get_groups(kp)
-                group = prompt_sel(groups)
+                group = pyfzf(groups)
                 if group == -1: pass
                 title = input("titre (laisser vide pour annuler):")
                 if title == "": pass
@@ -108,10 +112,8 @@ while True:
 
     else:
         print("sélectionner une entrée:")
-        entry_title = prompt_sel(entries)
+        entry_title = pyfzf(entries)
         if entry_title in entries:
             entry = search_entry(kp, entry_title)
         elif entry_title == -1:
             break
-        else:
-            pass
