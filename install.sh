@@ -9,6 +9,6 @@ read ans2
 [ "$ans2" = "o" ] && sed -i "s|keyring=|keyring=True|" "$XDG_CONFIG_HOME"/keepread/config.ini
 echo "Fichier de config:"
 cat "$XDG_CONFIG_HOME"/keepread/config.ini
-cp keepread.py ~/.local/bin/keepread
+cp kr.py ~/.local/bin/kr
 cp dkr.py ~/.local/bin/dkr
 cp totp.sh ~/.local/bin
