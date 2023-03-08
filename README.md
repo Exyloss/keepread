@@ -21,6 +21,11 @@ keyring-startup.sh &
 ```
 au démarrage de votre serveur X si vous souhaitez utiliser le keyring afin de sauvegarder le mot de passe de votre base de données.
 
+Pour activer le keyring, lancez la commande suivante dans un shell et rentrez votre mot de passe :
+```
+keyring system keepass
+```
+
 ## Fonctionnement
 Le script utilisant dmenu utilise le clavier pour rentrer un mot de passe, donc lorsque vous souhaitez rentrer un mot de passe dans un champ, votre
 curseur doit se trouver dans le champ de saisie du mot de passe.
