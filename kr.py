@@ -72,7 +72,7 @@ while True:
             elif r == "u":
                 copy(vals["nom d'utilisateur"])
             elif r == "m":
-                copy(vals["mot de passe"])
+                copy(get_pass(entry))
             elif r == "t":
                 if "totp" in vals.keys():
                     copy(entry_values(entry)["totp"])

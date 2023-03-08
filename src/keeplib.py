@@ -116,8 +116,11 @@ def entry_values(entry):
         entry_result["nom d'utilisateur"] = entry.username
 
     if entry.password != None:
-        entry_result["mot de passe"] = entry.password
+        entry_result["mot de passe"] = "*"*len(entry.password)
 
     if totp != None:
         entry_result["totp"] = totp
     return entry_result
+
+def get_pass(entry):
+    return entry.password
