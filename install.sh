@@ -3,10 +3,10 @@
 mkdir "$XDG_CONFIG_HOME"/keepread 2>/dev/null
 cp config.ini "$XDG_CONFIG_HOME"/keepread/
 sed -i "s|path=|path=$1|" "$XDG_CONFIG_HOME"/keepread/config.ini
-echo "Souhaitez-vous utiliser une application de keyring ? (o/n)"
+printf "Souhaitez-vous utiliser une application de keyring ? (o/n) "
 set -f
 read ans2
-[ "$ans2" = "o" ] && sed -i "s|keyring=|keyring=True|" "$XDG_CONFIG_HOME"/keepread/config.ini
+[ "$ans2" = "o" ] && sed -i "s|keyring=|keyring=True|" "$XDG_CONFIG_HOME"/keepread/config.ini || sed -i "s|keyring=|keyring=False|" "$XDG_CONFIG_HOME"/keepread/config.ini
 echo "Fichier de config:"
 cat "$XDG_CONFIG_HOME"/keepread/config.ini
 cp kr.py ~/.local/bin/kr
