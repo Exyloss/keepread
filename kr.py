@@ -26,17 +26,14 @@ key = config["conf"]["keyring"]
 if key == "True":
     pw = keyring.get_password("system", "keepass")
 else:
-    wrong = 1
-    while wrong == 1:
-        try:
-            pw = getpass("mot de passe:")
-            kp = pkp(path, password=pw)
-            wrong = 0
-        except:
-            print("Mot de passe invalide.")
+    pw = getpass("mot de passe:")
+
+try:
+    kp = pkp(path, password=pw)
+except:
+    print("mot de passe erroné.")
 
 pw = ""
-
 if args.title != None:
     entry = search_entry(kp, args.title)
 else:
