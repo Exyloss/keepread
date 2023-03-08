@@ -32,6 +32,7 @@ try:
     kp = pkp(path, password=pw)
 except:
     print("mot de passe erroné.")
+    quit()
 
 pw = ""
 if args.title != None:
