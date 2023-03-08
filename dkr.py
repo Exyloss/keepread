@@ -2,24 +2,26 @@
 import subprocess
 import keyring
 import os
-from pynput.keyboard import Controller
 from keeplib import *
 from configparser import ConfigParser
 
 def write_str(string):
-    for i in string:
-        keyboard.press(i)
+    if graphic == 'xorg':
+        os.system("xdotool type '"+string.replace("'", "\'")+"'")
+    elif graphic == 'wayland':
+        os.system("wtype '"+string.replace("'", "\'")+"'")
 
 def show_entries(temp, prompt=""):
-    name = prompt_sel(["dmenu", "-l", "10", "-p", prompt], temp)
+    print(menu+" "+prompt)
+    name = prompt_sel((menu+" "+prompt).split(" "), temp)
     return name
-
-keyboard = Controller()
 
 config = ConfigParser()
 config.read(os.environ["XDG_CONFIG_HOME"]+"/keepread/config.ini")
 path = config["conf"]["path"]
 key = config["conf"]["keyring"]
+graphic = config["conf"]["graphic"]
+menu = config["conf"]["menu"]
 
 if bool(key):
     pw = keyring.get_password("system", "keepass")
@@ -37,9 +39,11 @@ while True:
         entry_vals.append("supprimer l'entrée")
         while True:
             val = show_entries(entry_vals, "données:")
-            if val != -1 and val != "supprimer l'entrée"and val != "éditer l'entrée":
+            if val != -1 and val != "supprimer l'entrée"and val != "éditer l'entrée" and 'mot de passe' not in val:
                 val = ":".join(val.split(":")[1:])
                 write_str(val)
+            elif val != -1 and 'mot de passe' in val:
+                write_str(entry.password)
             elif val == "supprimer l'entrée":
                 confirm = show_entries(["oui", "non"], "supprimer l'entrée:")
                 if confirm == "oui":
