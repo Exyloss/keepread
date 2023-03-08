@@ -26,9 +26,15 @@ key = config["conf"]["keyring"]
 if key == "True":
     pw = keyring.get_password("system", "keepass")
 else:
-    pw = getpass("mot de passe:")
+    wrong = 1
+    while wrong == 1:
+        try:
+            pw = getpass("mot de passe:")
+            kp = pkp(path, password=pw)
+            wrong = 0
+        except:
+            print("Mot de passe invalide.")
 
-kp = pkp(path, password=pw)
 pw = ""
 
 if args.title != None:
