@@ -2,3 +2,4 @@ mintotp
 pykeepass
 pynput
 keyring
+pyperclip
