@@ -132,7 +132,6 @@ while True:
                     edit_entry(kp, entry, entry.username, entry.password, title)
                 entries = get_entries(kp)
 
-
     else:
         print("sélectionner une entrée:")
         entry_title = prompt_sel(["fzy"], entries)

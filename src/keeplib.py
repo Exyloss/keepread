@@ -8,7 +8,12 @@ def copy(text):
     pyperclip.copy(text)
     return 0
 
-def prompt_sel(args,items):
+def prompt_sel(args, items):
+    """
+    Fonction permettant à l'utilisateur d'interagir avec son menu depuis python
+    args: commande sous forme de tableau, chaque élément représente un "mot" de la fonction
+    items: liste des valeurs à afficher
+    """
     if items != "":
         try:
             proc = subprocess.Popen(
@@ -39,6 +44,12 @@ def prompt_sel(args,items):
         return -1
 
 def pass_gen(size=12, spe=True):
+    """
+    Générateur de mots de passe, prend comme arguments :
+    size: longueur du mot de passe
+    spe: inclure les caractères spéciaux (booléen)
+    retourne un mot de passe
+    """
     try:
         chars="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
         if spe:
@@ -53,6 +64,11 @@ def pass_gen(size=12, spe=True):
 
 
 def search_entry(kp, arg):
+    """
+    Fonction utilisée par kr.py et dkr.py afin d'obtenir la première occurence
+    kp: base de données keepass (objet PyKeePass)
+    arg: valeur recherchée
+    """
     entry = kp.find_entries(title=arg, first=True)
     if entry == None:
         return 1
@@ -61,6 +77,11 @@ def search_entry(kp, arg):
 
 
 def del_entry(kp, entry):
+    """
+    Fonction supprimant l'entrée spécifiée en argument de la base de données renseignée
+    kp: base de données keepass (objet PyKeePass)
+    entry: objet entry de PyKeePass
+    """
     try:
         kp.delete_entry(entry)
         kp.save()
@@ -69,6 +90,14 @@ def del_entry(kp, entry):
         return 1
 
 def edit_entry(kp, entry, uname, passwd, title):
+    """
+    commande éditant l'entrée spécifiée avec différentes valeurs :
+    kp: base de données de l'entrée
+    entry: objet entry
+    uname: nouveau nom d'utilisateur
+    passwd: nouveau mot de passe
+    title: nouveau titre
+    """
     try:
         kp.add_entry(entry.group, title, uname, passwd)
         kp.delete_entry(entry)
@@ -78,6 +107,14 @@ def edit_entry(kp, entry, uname, passwd, title):
         return 1
 
 def create_entry(kp, group, title, uname, passwd):
+    """
+    commande créant une entrée avec différentes valeurs :
+    kp: base de données de l'entrée
+    group: groupe de l'entrée
+    uname: nouveau nom d'utilisateur
+    passwd: nouveau mot de passe
+    title: nouveau titre
+    """
     try:
         g = kp.find_groups(name=group, first=True)
         if g == None:
@@ -89,6 +126,10 @@ def create_entry(kp, group, title, uname, passwd):
         return 1
 
 def get_entries(kp):
+    """
+    Fonction listant les entrées présentes dans la base de données kp.
+    kp: Objet PyKeePass
+    """
     e = kp.find_entries(title=".*", regex=True)
     entries = []
     for i in e:
@@ -97,6 +138,10 @@ def get_entries(kp):
     return entries
 
 def get_groups(kp):
+    """
+    Fonction listant les groupes présents dans la base de données kp.
+    kp: Objet PyKeePass
+    """
     e = kp.find_groups(name=".*", regex=True)
     entries = []
     for i in e:
@@ -105,6 +150,11 @@ def get_groups(kp):
     return entries
 
 def entry_values(entry):
+    """
+    Fonction utilisée par kr.py et dkr.py afin d'obtenir les données
+    d'un identifiant renseigné
+    entry: entrée PyKeePass
+    """
     try:
         totp = subprocess.check_output(
             "totp.sh "+entry.otp, shell=True
