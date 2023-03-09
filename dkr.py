@@ -18,10 +18,10 @@ def show_entries(temp, prompt=""):
 
 config = ConfigParser()
 config.read(os.environ["XDG_CONFIG_HOME"]+"/keepread/config.ini")
-path = config["conf"]["path"]
-key = config["conf"]["keyring"]
+path    = config["conf"]["path"]
+key     = config["conf"]["keyring"]
 graphic = config["conf"]["graphic"]
-menu = config["conf"]["menu"]
+menu    = config["conf"]["menu"]
 
 if bool(key):
     pw = keyring.get_password("system", "keepass")
@@ -39,7 +39,7 @@ while True:
         entry_vals.append("supprimer l'entrée")
         while True:
             val = show_entries(entry_vals, "données:")
-            if val != -1 and val != "supprimer l'entrée"and val != "éditer l'entrée" and 'mot de passe' not in val:
+            if val != -1 and val != "supprimer l'entrée" and val != "éditer l'entrée" and 'mot de passe' not in val:
                 val = ":".join(val.split(":")[1:])
                 write_str(val)
             elif val != -1 and 'mot de passe' in val:

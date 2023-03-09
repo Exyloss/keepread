@@ -38,11 +38,11 @@ def prompt_sel(args,items):
     if stderr == '':
         return -1
 
-def pass_gen(size=12, spe=False):
+def pass_gen(size=12, spe=True):
     try:
         chars="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
         if spe:
-            chars += "&?,.;/:!#@+-*/=_()[]çàéè~"
+            chars += "&?,.;/:!#@+-*=_()[]çàéè~^$%ù"
         len_chars=len(chars)
         passwd = ""
         for i in range(size):

@@ -1,5 +1,6 @@
 #!/bin/sh
 [ "$1" = "" ] && echo "Erreur : veuillez renseigner le chemin vers votre base de données en argument." && exit 1
+sed -i "s|^path=$|path=$1|" "$XDG_CONFIG_HOME"/keepread/config.ini
 mkdir "$XDG_CONFIG_HOME"/keepread 2>/dev/null
 printf "Copier le fichier de config initial (O/n) : "
 set -f

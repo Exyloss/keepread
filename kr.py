@@ -7,7 +7,7 @@ from getpass import getpass
 from configparser import ConfigParser
 
 def pyfzf(items):
-    return prompt_sel(["fzy"], items)
+    return prompt_sel(prompt.split(" "), items)
 
 parser = argparse.ArgumentParser(description="Lecteur de base de données keepass.")
 parser.add_argument("--password", action="store_true",
@@ -20,8 +20,9 @@ args = parser.parse_args()
 
 config = ConfigParser()
 config.read(os.environ["XDG_CONFIG_HOME"]+"/keepread/config.ini")
-path = config["conf"]["path"]
-key = config["conf"]["keyring"]
+path   = config["conf"]["path"]
+key    = config["conf"]["keyring"]
+prompt = config["conf"]["prompt"]
 
 if key == "True":
     pw = keyring.get_password("system", "keepass")
