@@ -1,4 +1,3 @@
 mintotp
 pykeepass
 keyring
-pyperclip

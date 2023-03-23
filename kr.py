@@ -5,9 +5,17 @@ import argparse
 import os
 from getpass import getpass
 from configparser import ConfigParser
+from clip_linux import copy_wl, copy_xclip
 
 def pyfzf(items):
     return prompt_sel(prompt.split(" "), items)
+
+def copy(text):
+    if graphic == 'wayland':
+        copy_wl(text)
+    else:
+        copy_xclip(text)
+    return True
 
 parser = argparse.ArgumentParser(description="Lecteur de base de données keepass.")
 parser.add_argument("--password", action="store_true",
@@ -18,11 +26,13 @@ parser.add_argument("title", metavar="entrée", type=str, nargs="?",
         help="nom de l'entrée à rechercher")
 args = parser.parse_args()
 
-config = ConfigParser()
+config  = ConfigParser()
 config.read(os.environ["XDG_CONFIG_HOME"]+"/keepread/config.ini")
-path   = config["conf"]["path"]
-key    = config["conf"]["keyring"]
-prompt = config["conf"]["prompt"]
+
+path    = config["conf"]["path"]
+key     = config["conf"]["keyring"]
+prompt  = config["conf"]["prompt"]
+graphic = config["conf"]["graphic"]
 
 if key == "True":
     pw = keyring.get_password("system", "keepass")

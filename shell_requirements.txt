@@ -1,2 +1,4 @@
 wtype
 xdotool
+wl-clipboard
+xclip

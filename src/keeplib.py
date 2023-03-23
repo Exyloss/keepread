@@ -2,11 +2,6 @@
 from pykeepass import PyKeePass as pkp
 from random import randint
 import subprocess
-import pyperclip
-
-def copy(text):
-    pyperclip.copy(text)
-    return 0
 
 def prompt_sel(args, items):
     """
@@ -23,7 +18,7 @@ def prompt_sel(args, items):
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE)
         except OSError as err:
-            print("erreur lors du lancement de dmenu")
+            print("erreur lors du lancement du menu")
 
         with proc.stdin:
             if isinstance(items, list):
