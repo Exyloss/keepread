@@ -4,7 +4,6 @@ import keyring
 import os
 from keeplib import *
 from configparser import ConfigParser
-import pyperclip
 from clip_linux import *
 
 def copy(text):
