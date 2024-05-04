@@ -20,7 +20,6 @@ def write_str(string):
         os.system("wtype '"+string.replace("'", "\'")+"'")
 
 def show_entries(temp, prompt=""):
-    print(menu+" "+prompt)
     name = prompt_sel((menu+" "+prompt).split(" "), temp)
     return name
 

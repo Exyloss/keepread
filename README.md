@@ -10,14 +10,13 @@
 ## Utiliser les programmes
 Installer les dépendances python :
 ```
-pip install -r requirements.txt && pip install -e .
+pip install -r requirements.txt
 ```
 Lancez le script install.sh pour initialiser la configuration et pour installer les programmes.
 
 Lancez aussi
 ```
-export $(gnome-keyring-daemon --start)
-keyring-startup.sh &
+systemctl --user enable --now gnome-keyring-daemon
 ```
 au démarrage de votre serveur X si vous souhaitez utiliser le keyring afin de sauvegarder le mot de passe de votre base de données.
 

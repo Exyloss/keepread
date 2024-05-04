@@ -1,3 +1,2 @@
-mintotp
 pykeepass
 keyring
